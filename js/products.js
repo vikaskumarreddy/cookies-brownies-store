@@ -71,3 +71,8 @@ function loadProductsByCategoryFromURL(containerId) {
     renderProducts(products, containerId);
   }
 }
+function loadFeaturedProducts() {
+  const featured = products.filter(p => p.featured);
+  renderProducts(featured, "featured-products");
+}
+
