@@ -36,6 +36,10 @@ function renderCategories() {
 /* ========================= */
 /* PRODUCT RENDERING         */
 /* ========================= */
+function getCartItem(id) {
+  const cart = getCart();
+  return cart.find(item => item.id === id);
+}
 
 function renderProducts(productList, containerId) {
   const container = document.getElementById(containerId);
@@ -49,15 +53,30 @@ function renderProducts(productList, containerId) {
   }
 
   productList.forEach(product => {
+    const cartItem = getCartItem(product.id);
+
     container.innerHTML += `
       <div class="product-card">
-        <img src="${product.image}">
+        <img src="${product.image}" />
         <h4>${product.name}</h4>
         <p>₹${product.price}</p>
-        <button onclick="addToCart(${product.id})">Add to Cart</button>
+
+        <div id="cart-btn-${product.id}">
+          ${cartItem ? quantityControls(product.id, cartItem.quantity) 
+                     : `<button onclick="addToCart(${product.id})" class="add-btn">Add to Cart</button>`}
+        </div>
       </div>
     `;
   });
+}
+function quantityControls(id, qty) {
+  return `
+    <div class="qty-control">
+      <button onclick="changeQty(${id}, -1)">-</button>
+      <span>${qty}</span>
+      <button onclick="changeQty(${id}, 1)">+</button>
+    </div>
+  `;
 }
 
 function loadProductsByCategoryFromURL(containerId) {
@@ -85,8 +104,8 @@ function saveCart(cart) {
 }
 
 function addToCart(id) {
-  const cart = getCart();
   const product = products.find(p => p.id === id);
+  let cart = getCart();
 
   const existing = cart.find(item => item.id === id);
 
@@ -96,9 +115,23 @@ function addToCart(id) {
     cart.push({ ...product, quantity: 1 });
   }
 
-  saveCart(cart);
-  updateCartCount();
-  alert("Added to cart!");
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  updateCartButton(id);
+}
+function updateCartButton(id) {
+  const container = document.getElementById(`cart-btn-${id}`);
+  const cartItem = getCartItem(id);
+
+  if (cartItem) {
+    container.innerHTML = quantityControls(id, cartItem.quantity);
+  } else {
+    container.innerHTML = `
+      <button onclick="addToCart(${id})" class="add-btn">
+        Add to Cart
+      </button>
+    `;
+  }
 }
 function updateCartCount() {
   const cart = getCart();
@@ -153,7 +186,7 @@ function loadCart() {
   totalEl.textContent = "Total: ₹" + total;
 }
 function changeQty(id, change) {
-  const cart = getCart();
+  let cart = getCart();
   const item = cart.find(i => i.id === id);
 
   if (!item) return;
@@ -161,13 +194,11 @@ function changeQty(id, change) {
   item.quantity += change;
 
   if (item.quantity <= 0) {
-    removeItem(id);
-    return;
+    cart = cart.filter(i => i.id !== id);
   }
 
-  saveCart(cart);
-  loadCart();
-  updateCartCount();
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartButton(id);
 }
 
 function removeItem(id) {
@@ -181,5 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
