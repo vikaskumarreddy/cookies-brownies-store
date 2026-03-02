@@ -67,6 +67,13 @@
     .logout-section button {
       background: #d9534f;
     }
+    .order-card {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
   </style>
 </head>
 
@@ -93,6 +100,10 @@
       <p id="user-email"></p>
       <button onclick="logout()">Logout</button>
     </div>
+    <div id="orders-section" style="display:none;">
+  <h2>My Orders</h2>
+  <div id="orders-list"></div>
+</div>
 
   </div>
 </div>
@@ -206,6 +217,7 @@ async function loadOrders(uid) {
 </script>
 </body>
 </html>
+
 
 
 
