@@ -2,26 +2,25 @@
 <html>
 <head>
   <title>Shop</title>
-  <link rel="stylesheet" href="css/styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
 <header class="navbar">
   <div class="logo">Sweet Cravings 🍪</div>
-
   <nav class="nav-links">
     <a href="products.html">Shop</a>
     <a href="categories.html">Categories</a>
     <a href="cart.html">Cart</a>
     <a href="login.html">Login</a>
   </nav>
-
   <div class="mobile-menu-icon" onclick="toggleMenu()">☰</div>
 </header>
-  
-<h2 style="padding:20px">All Products</h2>
+
+<h2 style="padding:20px">Products</h2>
 <div class="product-grid" id="all-products"></div>
-  
+
 <div class="bottom-nav">
   <a href="index.html">🏠<span>Home</span></a>
   <a href="products.html">🛍<span>Shop</span></a>
@@ -29,12 +28,11 @@
   <a href="cart.html">🛒<span>Cart</span></a>
   <a href="login.html">👤<span>Account</span></a>
 </div>
+
 <script src="js/products.js"></script>
 <script>
-  loadAllProducts();
+  loadProductsByCategoryFromURL("all-products");
 </script>
 
 </body>
 </html>
-
-
