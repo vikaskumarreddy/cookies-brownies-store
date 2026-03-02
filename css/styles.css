@@ -248,6 +248,35 @@ body {
   margin: 5px;
   cursor: pointer;
 }
+.add-btn {
+  background: #2f7d57;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.qty-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  background: #2f7d57;
+  color: white;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.qty-control button {
+  background: white;
+  border: none;
+  padding: 4px 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 
 
 
