@@ -35,18 +35,33 @@ function startPayment() {
   const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   const options = {
-    key: "rzp_live_SMM0CUEonWSfA8",
-    amount: total * 100, // paise
+    key: "rzp_test_SMNhigwmIBhDJ4",
+    amount: Math.round(total * 100), // Use Math.round to ensure it's an integer
     currency: "INR",
     name: "Sweet Cravings",
     description: "Order Payment",
+    // 1. Add Prefill (even if empty) to prevent initialization errors
+    "prefill": {
+        "name": "",
+        "email": "",
+        "contact": ""
+    },
+    // 2. Add Theme and Retry logic
+    "theme": {
+        "color": "#3399cc"
+    },
+    "modal": {
+        "ondismiss": function() {
+            console.log("Checkout closed");
+        }
+    },
     handler: function (response) {
-      alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-
-      localStorage.removeItem("cart");
-      window.location.href = "success.html";
+        alert("Payment Successful! ID: " + response.razorpay_payment_id);
+        localStorage.removeItem("cart");
+        window.location.href = "success.html";
     }
-  };
+};
+
 
   const rzp = new Razorpay(options);
   rzp.open();
