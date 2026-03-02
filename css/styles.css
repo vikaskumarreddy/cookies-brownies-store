@@ -37,6 +37,12 @@ body {
   display:flex;
   justify-content: center;
 }
+.checkout-button-div button{
+    color: white;
+    padding: 12px 16px;
+    background: #2F7D57;
+    border-radius: 6px;
+}
 .nav-links a {
   margin-left: 30px;
   text-decoration: none;
@@ -283,6 +289,7 @@ body {
   font-weight: bold;
   cursor: pointer;
 }
+
 
 
 
