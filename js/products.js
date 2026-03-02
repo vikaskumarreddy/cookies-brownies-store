@@ -1,6 +1,6 @@
 const products = [
-  { id: 1, name: "Choco Fudge Brownie", price: 120, image: "images/brownie1.jpg", category: "brownies", featured: true },
-  { id: 2, name: "Walnut Brownie", price: 150, image: "images/brownie2.jpg", category: "brownies", featured: false },
+  { id: 1, name: "Choco Fudge Brownie", price: 120, image: "images/shopping.webp", category: "brownies", featured: true },
+  { id: 2, name: "Walnut Brownie", price: 150, image: "images/Nutella_brownie.webp", category: "brownies", featured: false },
   { id: 3, name: "Choco Chip Cookie", price: 80, image: "images/cookie1.jpg", category: "cookies", featured: true },
   { id: 4, name: "Butter Cookie", price: 60, image: "images/cookie2.jpg", category: "cookies", featured: false },
   { id: 5, name: "Premium Gift Box", price: 499, image: "images/brownie1.jpg", category: "gifts", featured: true }
@@ -257,6 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
