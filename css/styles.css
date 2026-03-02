@@ -29,7 +29,14 @@ body {
   font-size: 22px;
   font-weight: 600;
 }
-
+.payment-div{
+  display: flex;
+  justify-content:end;
+}
+.checkout-button-div{
+  display:flex;
+  justify-content: center;
+}
 .nav-links a {
   margin-left: 30px;
   text-decoration: none;
@@ -276,6 +283,7 @@ body {
   font-weight: bold;
   cursor: pointer;
 }
+
 
 
 
