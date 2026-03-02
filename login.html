@@ -120,6 +120,15 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDRzQ1qiq__Zp2IWa40IyV2kLi-5TwXjTQ",
   authDomain: "cookie-store-8d48b.firebaseapp.com",
@@ -131,6 +140,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 let isLogin = true;
 
@@ -172,51 +182,73 @@ window.logout = function() {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    localStorage.setItem("user", JSON.stringify({
-      uid: user.uid,
-      email: user.email
-    }));
 
     document.getElementById("auth-form").style.display = "none";
     document.getElementById("logout-section").style.display = "block";
+    document.getElementById("orders-section").style.display = "block";
+
     document.getElementById("user-email").innerText = user.email;
+
+    loadOrders(user.uid);
+
   } else {
-    localStorage.removeItem("user");
+
     document.getElementById("auth-form").style.display = "block";
     document.getElementById("logout-section").style.display = "none";
+    document.getElementById("orders-section").style.display = "none";
+
   }
-  loadOrders(user.uid);
 });
+
 async function loadOrders(uid) {
+
   const ordersContainer = document.getElementById("orders-list");
   ordersContainer.innerHTML = "Loading orders...";
 
-  const q = query(collection(db, "orders"), where("userId", "==", uid));
-  const snapshot = await getDocs(q);
+  try {
 
-  if (snapshot.empty) {
-    ordersContainer.innerHTML = "<p>No orders yet.</p>";
-    return;
+    const q = query(
+      collection(db, "orders"),
+      where("userId", "==", uid),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      ordersContainer.innerHTML = "<p>No orders yet.</p>";
+      return;
+    }
+
+    ordersContainer.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+
+      const date = data.createdAt
+        ? new Date(data.createdAt.seconds * 1000).toLocaleString()
+        : "N/A";
+
+      ordersContainer.innerHTML += `
+        <div class="order-card">
+          <h4>Order ID: ${doc.id}</h4>
+          <p>Status: ${data.status}</p>
+          <p>Total: ₹${data.total}</p>
+          <p>Date: ${date}</p>
+        </div>
+      `;
+    });
+
+  } catch (error) {
+    console.error("Error loading orders:", error);
+    ordersContainer.innerHTML = "<p>Error loading orders.</p>";
   }
-
-  ordersContainer.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const data = doc.data();
-
-    ordersContainer.innerHTML += `
-      <div class="order-card">
-        <h4>Order ID: ${doc.id}</h4>
-        <p>Status: ${data.status}</p>
-        <p>Total: ₹${data.total}</p>
-        <p>Date: ${new Date(data.createdAt.seconds * 1000).toLocaleString()}</p>
-      </div>
-    `;
-  });
 }
+
 </script>
 </body>
 </html>
+
 
 
 
