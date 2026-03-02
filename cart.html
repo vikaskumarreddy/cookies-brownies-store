@@ -35,10 +35,14 @@
   <a href="login.html">👤<span>Account</span></a>
 </div>
 
-<script src="js/cart.js"></script>
 <script src="js/products.js"></script>
 <script>
-  displayCart();
+  <script>
+  document.addEventListener("DOMContentLoaded", displayCart);
+
+  function checkout() {
+    alert("Checkout coming soon!");
+  }
 
   function checkout() {
     alert("Checkout coming soon!");
@@ -47,6 +51,7 @@
 
 </body>
 </html>
+
 
 
 
