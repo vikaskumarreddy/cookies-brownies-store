@@ -35,7 +35,7 @@ function startPayment() {
   const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   const options = {
-    key: "YOUR_RAZORPAY_KEY",
+    key: "rzp_live_SMM0CUEonWSfA8",
     amount: total * 100, // paise
     currency: "INR",
     name: "Sweet Cravings",
