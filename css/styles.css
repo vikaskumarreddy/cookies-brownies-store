@@ -244,6 +244,14 @@ body {
     min-width: 48%;
     flex: 0 0 auto;
   }
+  .checkout-wrapper {
+    flex-direction: column;
+  }
+
+  .checkout-right {
+    position: sticky;
+    bottom: 0;
+  }
 }
 
 .cart-item {
@@ -288,6 +296,83 @@ body {
   padding: 4px 10px;
   font-weight: bold;
   cursor: pointer;
+}
+.checkout-wrapper {
+  display: flex;
+  gap: 30px;
+  padding: 20px;
+}
+
+.checkout-left {
+  flex: 2;
+}
+
+.checkout-right {
+  flex: 1;
+}
+
+.section-title {
+  margin-bottom: 15px;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+textarea {
+  margin-bottom: 15px;
+  resize: none;
+  height: 80px;
+}
+
+.summary-items {
+  margin-bottom: 15px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.total-row {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  background: #1db954;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.pay-btn:hover {
+  background: #169c46;
 }
 
 
