@@ -1,3 +1,39 @@
+/* ============================= */
+/* 🔥 FIREBASE INITIALIZATION   */
+/* ============================= */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+/* Your Firebase Config */
+const firebaseConfig = {
+  apiKey: "AIzaSyDRzQ1qiq__Zp2IWa40IyV2kLi-5TwXjTQ",
+  authDomain: "cookie-store-8d48b.firebaseapp.com",
+  projectId: "cookie-store-8d48b",
+  storageBucket: "cookie-store-8d48b.firebasestorage.app",
+  messagingSenderId: "234022229604",
+  appId: "1:234022229604:web:f58d2d99ae17fbc0da3171",
+  measurementId: "G-1FLBZKGLV1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+/* ============================= */
+/* 🛒 CART UTILITIES            */
+/* ============================= */
+
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+
+/* ============================= */
+/* 📦 LOAD CHECKOUT SUMMARY     */
+/* ============================= */
+
 function loadCheckout() {
   const cart = getCart();
   const container = document.getElementById("checkout-items");
@@ -7,6 +43,11 @@ function loadCheckout() {
   if (!container) return;
 
   container.innerHTML = "";
+
+  if (cart.length === 0) {
+    container.innerHTML = `<tr><td colspan="3">Cart is empty</td></tr>`;
+    return;
+  }
 
   let subtotal = 0;
   const deliveryCharge = 40;
@@ -28,49 +69,109 @@ function loadCheckout() {
   totalEl.textContent = "₹" + (subtotal + deliveryCharge);
 }
 
-document.addEventListener("DOMContentLoaded", loadCheckout);
 
-function startPayment() {
+/* ============================= */
+/* 💳 START PAYMENT             */
+/* ============================= */
+
+window.startPayment = function () {
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    alert("Please login first.");
+    window.location.href = "login.html";
+    return;
+  }
+
   const cart = getCart();
-  const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  /* Validate Address */
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const city = document.getElementById("city").value.trim();
+  const pincode = document.getElementById("pincode").value.trim();
+  const state = document.getElementById("state").value;
+
+  if (!name || !phone || !address || !city || !pincode || !state) {
+    alert("Please fill all address details.");
+    return;
+  }
+
+  const deliveryCharge = 40;
+  const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const finalTotal = subtotal + deliveryCharge;
 
   const options = {
-    key: "rzp_test_SMNhigwmIBhDJ4",
-    amount: Math.round(total * 100), // Use Math.round to ensure it's an integer
+    key: "rzp_test_SMNhigwmIBhDJ4", // your test key
+    amount: Math.round(finalTotal * 100),
     currency: "INR",
     name: "Sweet Cravings",
     description: "Order Payment",
-    // 1. Add Prefill (even if empty) to prevent initialization errors
-    "prefill": {
-        "name": "",
-        "email": "",
-        "contact": ""
+    prefill: {
+      name: name,
+      email: user.email,
+      contact: phone
     },
-    // 2. Add Theme and Retry logic
-    "theme": {
-        "color": "#3399cc"
+    theme: {
+      color: "#2f7d57"
     },
-    "modal": {
-        "ondismiss": function() {
-            console.log("Checkout closed");
-        }
-    },
-    handler: function (response) {
-        alert("Payment Successful! ID: " + response.razorpay_payment_id);
-        localStorage.removeItem("cart");
-        window.location.href = "success.html";
-    }
-};
+    handler: async function (response) {
 
+      try {
+
+        const orderData = {
+          userId: user.uid,
+          userEmail: user.email,
+          items: cart,
+          address: {
+            name,
+            phone,
+            address,
+            city,
+            pincode,
+            state
+          },
+          paymentId: response.razorpay_payment_id,
+          subtotal,
+          deliveryCharge,
+          total: finalTotal,
+          status: "Paid",
+          createdAt: serverTimestamp()
+        };
+
+        await addDoc(collection(db, "orders"), orderData);
+
+        localStorage.removeItem("cart");
+
+        alert("Payment Successful! 🎉");
+        window.location.href = "success.html";
+
+      } catch (error) {
+        console.error("Order Save Error:", error);
+        alert("Payment done but order saving failed. Contact support.");
+      }
+    },
+    modal: {
+      ondismiss: function () {
+        console.log("Payment popup closed");
+      }
+    }
+  };
 
   const rzp = new Razorpay(options);
   rzp.open();
-}
+};
 
-document.addEventListener("DOMContentLoaded", loadCheckout);
-const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user) {
-  alert("Please login first.");
-  window.location.href = "login.html";
-}
+/* ============================= */
+/* 🚀 INIT                      */
+/* ============================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadCheckout();
+});
