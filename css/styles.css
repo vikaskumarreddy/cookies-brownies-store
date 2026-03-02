@@ -374,6 +374,12 @@ textarea {
 .pay-btn:hover {
   background: #169c46;
 }
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
 
 
 
