@@ -105,7 +105,11 @@ function updateCartCount() {
   const total = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const countEl = document.getElementById("cart-count");
-  if (countEl) countEl.textContent = total;
+  const countELMobile = document.getElementById("cart-count-mobile");
+  if (countEl) {
+    countEl.textContent = total;
+    countELMobile.textContent = total;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", updateCartCount);
@@ -177,4 +181,5 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
