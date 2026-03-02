@@ -185,7 +185,7 @@ function loadCart() {
     `;
   });
 
-  totalEl.textContent = "Total: ₹" + total;
+  totalEl.textContent = " ₹" + total;
 }
 function changeQty(id, change) {
   let cart = getCart();
@@ -214,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
