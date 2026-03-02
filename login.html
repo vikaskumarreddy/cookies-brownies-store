@@ -1,9 +1,191 @@
-<div class="auth-container">
-  <h2>Login / Register</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login | Sweet Cravings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
+  <link rel="stylesheet" href="css/styles.css">
 
-  <button onclick="login()">Login</button>
-  <button onclick="register()">Register</button>
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9f8;
+      padding: 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .auth-card h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #2f7d57;
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    .auth-card button {
+      width: 100%;
+      padding: 12px;
+      background: #2f7d57;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .auth-toggle {
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      color: #2f7d57;
+      margin-top: 10px;
+    }
+
+    .logout-section {
+      text-align: center;
+    }
+
+    .logout-section button {
+      background: #d9534f;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div id="auth-form">
+      <h2 id="form-title">Login</h2>
+
+      <input type="email" id="email" placeholder="Email Address">
+      <input type="password" id="password" placeholder="Password">
+
+      <button onclick="login()">Login</button>
+
+      <div class="auth-toggle" onclick="toggleMode()">
+        Don't have an account? Register
+      </div>
+    </div>
+
+    <div id="logout-section" class="logout-section" style="display:none;">
+      <h2>Welcome Back 🎉</h2>
+      <p id="user-email"></p>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+  </div>
 </div>
+
+<!-- Firebase SDK -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+/* 🔥 REPLACE WITH YOUR FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+let isLogin = true;
+
+window.toggleMode = function() {
+  isLogin = !isLogin;
+
+  document.getElementById("form-title").innerText =
+    isLogin ? "Login" : "Register";
+
+  document.querySelector(".auth-toggle").innerText =
+    isLogin
+      ? "Don't have an account? Register"
+      : "Already have an account? Login";
+};
+
+window.login = function() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  if (isLogin) {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch(err => alert(err.message));
+  } else {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        alert("Account created successfully!");
+      })
+      .catch(err => alert(err.message));
+  }
+};
+
+window.logout = function() {
+  signOut(auth).then(() => {
+    alert("Logged out successfully");
+  });
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    localStorage.setItem("user", JSON.stringify({
+      uid: user.uid,
+      email: user.email
+    }));
+
+    document.getElementById("auth-form").style.display = "none";
+    document.getElementById("logout-section").style.display = "block";
+    document.getElementById("user-email").innerText = user.email;
+
+  } else {
+    localStorage.removeItem("user");
+
+    document.getElementById("auth-form").style.display = "block";
+    document.getElementById("logout-section").style.display = "none";
+  }
+});
+
+</script>
+
+</body>
+</html>
