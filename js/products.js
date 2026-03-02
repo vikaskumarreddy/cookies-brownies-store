@@ -76,3 +76,105 @@ function loadFeaturedProducts() {
   renderProducts(featured, "featured-products");
 }
 
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function addToCart(id) {
+  const cart = getCart();
+  const product = products.find(p => p.id === id);
+
+  const existing = cart.find(item => item.id === id);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ ...product, quantity: 1 });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+  alert("Added to cart!");
+}
+function updateCartCount() {
+  const cart = getCart();
+  const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const countEl = document.getElementById("cart-count");
+  if (countEl) countEl.textContent = total;
+}
+
+document.addEventListener("DOMContentLoaded", updateCartCount);
+function loadCart() {
+  const cart = getCart();
+  const container = document.getElementById("cart-items");
+  const totalEl = document.getElementById("cart-total");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (cart.length === 0) {
+    container.innerHTML = "<p>Your cart is empty.</p>";
+    totalEl.textContent = "";
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+
+    container.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.image}" width="80"/>
+        <div>
+          <h4>${item.name}</h4>
+          <p>₹${item.price}</p>
+          <div>
+            <button onclick="changeQty(${item.id}, -1)">-</button>
+            ${item.quantity}
+            <button onclick="changeQty(${item.id}, 1)">+</button>
+            <button onclick="removeItem(${item.id})">Remove</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  totalEl.textContent = "Total: ₹" + total;
+}
+function changeQty(id, change) {
+  const cart = getCart();
+  const item = cart.find(i => i.id === id);
+
+  if (!item) return;
+
+  item.quantity += change;
+
+  if (item.quantity <= 0) {
+    removeItem(id);
+    return;
+  }
+
+  saveCart(cart);
+  loadCart();
+  updateCartCount();
+}
+
+function removeItem(id) {
+  let cart = getCart();
+  cart = cart.filter(item => item.id !== id);
+  saveCart(cart);
+  loadCart();
+  updateCartCount();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartCount();
+  loadCart();
+});
+
