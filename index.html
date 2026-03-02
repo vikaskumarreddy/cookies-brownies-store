@@ -1,22 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Sweet Cravings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<nav>
-  <h1>Sweet Cravings 🍪</h1>
-  <a href="products.html">Shop</a>
-  <a href="cart.html">Cart</a>
-  <a href="login.html">Login</a>
-</nav>
+<!-- ===== NAVBAR ===== -->
+<header class="navbar">
+  <div class="logo">Sweet Cravings 🍪</div>
 
+  <nav class="nav-links">
+    <a href="products.html">Shop</a>
+    <a href="cart.html">Cart</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <div class="mobile-menu-icon" onclick="toggleMenu()">☰</div>
+</header>
+
+<!-- ===== HERO SECTION ===== -->
 <section class="hero">
-  <h2>Freshly Baked Cookies & Brownies</h2>
-  <a href="products.html" class="btn">Shop Now</a>
+  <div class="hero-overlay">
+    <h1>Freshly Baked.<br>100% Natural.<br>Fast Delivery.</h1>
+    <div class="hero-buttons">
+      <a href="products.html" class="btn-primary">Shop Now</a>
+      <a href="products.html" class="btn-outline">View Categories</a>
+    </div>
+  </div>
 </section>
+
+<!-- ===== SHOP BY CATEGORY ===== -->
+<section class="categories">
+  <div class="section-header">
+    <h2>Shop By Categories</h2>
+    <a href="products.html">View All</a>
+  </div>
+
+  <div class="category-grid">
+    <div class="category-card">
+      <img src="images/brownie1.jpg">
+      <p>Brownies →</p>
+    </div>
+    <div class="category-card">
+      <img src="images/cookie1.jpg">
+      <p>Cookies →</p>
+    </div>
+    <div class="category-card">
+      <img src="images/brownie2.jpg">
+      <p>Premium →</p>
+    </div>
+    <div class="category-card">
+      <img src="images/cookie2.jpg">
+      <p>Gift Boxes →</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<div class="bottom-nav">
+  <a href="index.html">🏠<span>Home</span></a>
+  <a href="products.html">🛍<span>Shop</span></a>
+  <a href="#">📦<span>Orders</span></a>
+  <a href="cart.html">🛒<span>Cart</span></a>
+  <a href="login.html">👤<span>Account</span></a>
+</div>
+
+<script>
+function toggleMenu() {
+  document.querySelector(".nav-links").classList.toggle("active");
+}
+</script>
 
 </body>
 </html>
