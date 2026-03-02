@@ -109,25 +109,14 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* 🔥 REPLACE WITH YOUR FIREBASE CONFIG */
-<script type="module">
-  import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDRzQ1qiq__Zp2IWa40IyV2kLi-5TwXjTQ",
-    authDomain: "cookie-store-8d48b.firebaseapp.com",
-    projectId: "cookie-store-8d48b",
-    storageBucket: "cookie-store-8d48b.firebasestorage.app",
-    messagingSenderId: "234022229604",
-    appId: "1:234022229604:web:f58d2d99ae17fbc0da3171",
-    measurementId: "G-1FLBZKGLV1"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDRzQ1qiq__Zp2IWa40IyV2kLi-5TwXjTQ",
+  authDomain: "cookie-store-8d48b.firebaseapp.com",
+  projectId: "cookie-store-8d48b",
+  storageBucket: "cookie-store-8d48b.appspot.com",
+  messagingSenderId: "234022229604",
+  appId: "1:234022229604:web:f58d2d99ae17fbc0da3171"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -157,23 +146,17 @@ window.login = function() {
 
   if (isLogin) {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        window.location.href = "index.html";
-      })
+      .then(() => window.location.href = "index.html")
       .catch(err => alert(err.message));
   } else {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        alert("Account created successfully!");
-      })
+      .then(() => alert("Account created successfully!"))
       .catch(err => alert(err.message));
   }
 };
 
 window.logout = function() {
-  signOut(auth).then(() => {
-    alert("Logged out successfully");
-  });
+  signOut(auth);
 };
 
 onAuthStateChanged(auth, (user) => {
@@ -186,17 +169,15 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("auth-form").style.display = "none";
     document.getElementById("logout-section").style.display = "block";
     document.getElementById("user-email").innerText = user.email;
-
   } else {
     localStorage.removeItem("user");
-
     document.getElementById("auth-form").style.display = "block";
     document.getElementById("logout-section").style.display = "none";
   }
 });
 
 </script>
-
 </body>
 </html>
+
 
