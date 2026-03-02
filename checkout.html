@@ -18,19 +18,73 @@
   </nav>
 </header>
 
-<div class="checkout-container">
+<div class="checkout-wrapper">
 
-  <h2>Delivery Address</h2>
+  <!-- LEFT SIDE -->
+  <div class="checkout-left">
 
-  <input type="text" id="name" placeholder="Full Name">
-  <input type="text" id="phone" placeholder="Phone Number">
-  <textarea id="address" placeholder="Full Address"></textarea>
+    <h2 class="section-title">Delivery Details</h2>
 
-  <h3>Order Summary</h3>
-  <div id="checkout-items"></div>
-  <h3 id="checkout-total"></h3>
+    <div class="card address-card">
+      <div class="form-row">
+        <input type="text" id="name" placeholder="Full Name *">
+        <input type="text" id="phone" placeholder="Phone Number *">
+      </div>
 
-  <button onclick="startPayment()">Proceed to Pay</button>
+      <textarea id="address" placeholder="House No, Street, Area *"></textarea>
+
+      <div class="form-row">
+        <input type="text" id="city" placeholder="City *">
+        <input type="text" id="pincode" placeholder="Pincode *">
+      </div>
+
+      <div class="form-row">
+        <select id="state">
+          <option value="">Select State</option>
+          <option>Tamil Nadu</option>
+          <option>Karnataka</option>
+          <option>Kerala</option>
+          <option>Telangana</option>
+        </select>
+        <select id="address-type">
+          <option>Home</option>
+          <option>Work</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="checkout-right">
+
+    <div class="card summary-card">
+      <h3>Order Summary</h3>
+
+      <div id="checkout-items" class="summary-items"></div>
+
+      <div class="price-row">
+        <span>Subtotal</span>
+        <span id="subtotal"></span>
+      </div>
+
+      <div class="price-row">
+        <span>Delivery</span>
+        <span>₹40</span>
+      </div>
+
+      <div class="price-row total-row">
+        <span>Total</span>
+        <span id="checkout-total"></span>
+      </div>
+
+      <button class="pay-btn" onclick="startPayment()">
+        Proceed to Payment
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 <div class="bottom-nav">
