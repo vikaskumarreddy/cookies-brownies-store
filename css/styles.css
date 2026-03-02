@@ -17,7 +17,7 @@ body {
   left: 0;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 18px 40px;
   background: #2f7d57;
@@ -232,6 +232,7 @@ body {
     flex: 0 0 auto;
   }
 }
+
 
 
 
