@@ -110,14 +110,24 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 /* 🔥 REPLACE WITH YOUR FIREBASE CONFIG */
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
-};
+<script type="module">
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDRzQ1qiq__Zp2IWa40IyV2kLi-5TwXjTQ",
+    authDomain: "cookie-store-8d48b.firebaseapp.com",
+    projectId: "cookie-store-8d48b",
+    storageBucket: "cookie-store-8d48b.firebasestorage.app",
+    messagingSenderId: "234022229604",
+    appId: "1:234022229604:web:f58d2d99ae17fbc0da3171",
+    measurementId: "G-1FLBZKGLV1"
+  };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -189,3 +199,4 @@ onAuthStateChanged(auth, (user) => {
 
 </body>
 </html>
+
