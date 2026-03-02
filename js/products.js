@@ -118,6 +118,8 @@ function addToCart(id) {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   updateCartButton(id);
+  updateCartCount();
+
 }
 function updateCartButton(id) {
   const container = document.getElementById(`cart-btn-${id}`);
@@ -132,7 +134,6 @@ function updateCartButton(id) {
       </button>
     `;
   }
-  updateCartCount();
 }
 function updateCartCount() {
   const cart = getCart();
@@ -213,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
