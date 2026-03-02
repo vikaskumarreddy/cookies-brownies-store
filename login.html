@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login | Sweet Cravings</title>
+  <title>Account | Sweet Cravings</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="css/styles.css">
 
   <style>
@@ -18,17 +17,11 @@
 
     .auth-card {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       background: white;
-      padding: 30px;
-      border-radius: 10px;
+      padding: 25px;
+      border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-
-    .auth-card h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #2f7d57;
     }
 
     .auth-card input {
@@ -37,7 +30,6 @@
       margin-bottom: 15px;
       border-radius: 6px;
       border: 1px solid #ddd;
-      font-size: 14px;
     }
 
     .auth-card button {
@@ -57,31 +49,81 @@
       font-size: 14px;
       cursor: pointer;
       color: #2f7d57;
-      margin-top: 10px;
     }
 
-    .logout-section {
+    .account-header {
       text-align: center;
+      margin-bottom: 20px;
     }
 
-    .logout-section button {
+    .orders-scroll {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .order-card {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .view-items-btn {
+      background: #2f7d57;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .items-table {
+      margin-top: 10px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .items-table th,
+    .items-table td {
+      border-bottom: 1px solid #eee;
+      padding: 6px;
+      text-align: left;
+    }
+
+    .logout-btn {
+      width: 100%;
+      margin-top: 20px;
       background: #d9534f;
     }
-    .order-card {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-}
   </style>
 </head>
 
 <body>
 
+<header class="navbar">
+  <div class="logo">Sweet Cravings 🍪</div>
+  <nav class="nav-links">
+    <a href="products.html">Shop</a>
+    <a href="categories.html">Categories</a>
+    <a href="cart.html">🛒</a>
+    <a href="login.html">Account</a>
+  </nav>
+</header>
+
 <div class="auth-wrapper">
   <div class="auth-card">
 
+    <!-- LOGIN FORM -->
     <div id="auth-form">
       <h2 id="form-title">Login</h2>
 
@@ -95,20 +137,23 @@
       </div>
     </div>
 
-    <div id="logout-section" class="logout-section" style="display:none;">
-      <h2>Welcome Back 🎉</h2>
-      <p id="user-email"></p>
-      <button onclick="logout()">Logout</button>
+    <!-- ACCOUNT SECTION -->
+    <div id="account-section" style="display:none;">
+
+      <div class="account-header">
+        <h2>Welcome, <span id="user-name"></span> 👋</h2>
+      </div>
+
+      <h3>My Orders</h3>
+      <div id="orders-list" class="orders-scroll"></div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+
     </div>
-    <div id="orders-section" style="display:none;">
-  <h2>My Orders</h2>
-  <div id="orders-list"></div>
-</div>
 
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -146,10 +191,8 @@ let isLogin = true;
 
 window.toggleMode = function() {
   isLogin = !isLogin;
-
   document.getElementById("form-title").innerText =
     isLogin ? "Login" : "Register";
-
   document.querySelector(".auth-toggle").innerText =
     isLogin
       ? "Don't have an account? Register"
@@ -167,7 +210,6 @@ window.login = function() {
 
   if (isLogin) {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => window.location.href = "index.html")
       .catch(err => alert(err.message));
   } else {
     createUserWithEmailAndPassword(auth, email, password)
@@ -181,23 +223,24 @@ window.logout = function() {
 };
 
 onAuthStateChanged(auth, (user) => {
+
   if (user) {
 
     document.getElementById("auth-form").style.display = "none";
-    document.getElementById("logout-section").style.display = "block";
-    document.getElementById("orders-section").style.display = "block";
+    document.getElementById("account-section").style.display = "block";
 
-    document.getElementById("user-email").innerText = user.email;
+    const name = user.email.split("@")[0];
+    document.getElementById("user-name").innerText = name;
 
     loadOrders(user.uid);
 
   } else {
 
     document.getElementById("auth-form").style.display = "block";
-    document.getElementById("logout-section").style.display = "none";
-    document.getElementById("orders-section").style.display = "none";
+    document.getElementById("account-section").style.display = "none";
 
   }
+
 });
 
 async function loadOrders(uid) {
@@ -223,18 +266,57 @@ async function loadOrders(uid) {
     ordersContainer.innerHTML = "";
 
     snapshot.forEach(doc => {
+
       const data = doc.data();
 
       const date = data.createdAt
         ? new Date(data.createdAt.seconds * 1000).toLocaleString()
         : "N/A";
 
+      let itemsHTML = `
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      data.items.forEach(item => {
+        itemsHTML += `
+          <tr>
+            <td>${item.name}</td>
+            <td>${item.quantity}</td>
+            <td>₹${item.price * item.quantity}</td>
+          </tr>
+        `;
+      });
+
+      itemsHTML += `
+          </tbody>
+        </table>
+      `;
+
+      const orderId = "items-" + doc.id;
+
       ordersContainer.innerHTML += `
         <div class="order-card">
-          <h4>Order ID: ${doc.id}</h4>
-          <p>Status: ${data.status}</p>
-          <p>Total: ₹${data.total}</p>
-          <p>Date: ${date}</p>
+          <div class="order-header">
+            <div>
+              <strong>Order ID:</strong> ${doc.id}<br>
+              <small>${date}</small><br>
+              <strong>Total:</strong> ₹${data.total}
+            </div>
+            <button class="view-items-btn" onclick="toggleItems('${orderId}')">
+              View Items
+            </button>
+          </div>
+          <div id="${orderId}" style="display:none;">
+            ${itemsHTML}
+          </div>
         </div>
       `;
     });
@@ -245,11 +327,12 @@ async function loadOrders(uid) {
   }
 }
 
+window.toggleItems = function(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === "none" ? "block" : "none";
+};
+
 </script>
+
 </body>
 </html>
-
-
-
-
-
