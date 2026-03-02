@@ -201,6 +201,7 @@ function changeQty(id, change) {
 
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartButton(id);
+  displayCart();
 }
 
 function removeItem(id) {
@@ -214,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
