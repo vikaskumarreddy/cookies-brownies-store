@@ -123,6 +123,7 @@ function addToCart(id) {
 }
 function updateCartButton(id) {
   const container = document.getElementById(`cart-btn-${id}`);
+  if (!container) return;
   const cartItem = getCartItem(id);
 
   if (cartItem) {
@@ -256,6 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
