@@ -199,9 +199,11 @@ function changeQty(id, change) {
     cart = cart.filter(i => i.id !== id);
   }
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartButton(id);
-  displayCart();
+  saveCart(cart);
+
+  displayCart();        // for cart page
+  updateCartButton(id); // for products page
+  updateCartCount();    // navbar badge
 }
 function displayCart() {
   const cart = getCart();
@@ -254,6 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
