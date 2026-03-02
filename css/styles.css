@@ -39,14 +39,12 @@ body {
 
 /* ===== HERO ===== */
 .hero {
-  height: 85vh;
   background: url("../images/brownie1.jpg") center/cover no-repeat;
   position: relative;
 }
 
 .hero-overlay {
   background: rgba(0, 0, 0, 0.45);
-  height: 100%;
   color: white;
   display: flex;
   flex-direction: column;
@@ -227,5 +225,6 @@ body {
     flex: 0 0 auto;
   }
 }
+
 
 
