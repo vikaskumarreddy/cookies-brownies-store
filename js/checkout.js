@@ -14,9 +14,16 @@ function loadCheckout() {
   cart.forEach(item => {
     total += item.price * item.quantity;
     container.innerHTML += `
-      <p>${item.name} x ${item.quantity} = ₹${item.price * item.quantity}</p>
-    `;
+  <div class="summary-item">
+    <div>
+      <strong>${item.name}</strong>
+      <div>Qty: ${item.quantity}</div>
+    </div>
+    <div>₹${item.price * item.quantity}</div>
+  </div>
+`;
   });
+  
 
   totalEl.textContent = "Total: ₹" + total;
 }
