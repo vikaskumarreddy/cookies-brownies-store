@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Categories</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<h2 style="padding:20px">Products</h2>
+<div class="product-grid" id="category-products"></div>
+
+<script src="js/products.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get("category");
+
+  if (category) {
+    loadCategoryProducts(category);
+  } else {
+    renderProducts(products, "category-products");
+  }
+</script>
+
+</body>
+</html>
