@@ -132,6 +132,7 @@ function updateCartButton(id) {
       </button>
     `;
   }
+  updateCartCount();
 }
 function updateCartCount() {
   const cart = getCart();
@@ -212,6 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   loadCart();
 });
+
 
 
 
