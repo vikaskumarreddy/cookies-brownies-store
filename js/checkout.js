@@ -1,32 +1,34 @@
 function loadCheckout() {
   const cart = getCart();
   const container = document.getElementById("checkout-items");
+  const subtotalEl = document.getElementById("subtotal");
   const totalEl = document.getElementById("checkout-total");
 
-  if (!cart.length) {
-    container.innerHTML = "Cart is empty.";
-    return;
-  }
+  if (!container) return;
 
-  let total = 0;
   container.innerHTML = "";
 
-  cart.forEach(item => {
-    total += item.price * item.quantity;
-    container.innerHTML += `
-  <div class="summary-item">
-    <div>
-      <strong>${item.name}</strong>
-      <div>Qty: ${item.quantity}</div>
-    </div>
-    <div>₹${item.price * item.quantity}</div>
-  </div>
-`;
-  });
-  
+  let subtotal = 0;
+  const deliveryCharge = 40;
 
-  totalEl.textContent = "Total: ₹" + total;
+  cart.forEach(item => {
+    const itemTotal = item.price * item.quantity;
+    subtotal += itemTotal;
+
+    container.innerHTML += `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.quantity}</td>
+        <td>₹${itemTotal}</td>
+      </tr>
+    `;
+  });
+
+  subtotalEl.textContent = "₹" + subtotal;
+  totalEl.textContent = "₹" + (subtotal + deliveryCharge);
 }
+
+document.addEventListener("DOMContentLoaded", loadCheckout);
 
 function startPayment() {
   const cart = getCart();
