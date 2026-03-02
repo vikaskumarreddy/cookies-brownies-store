@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <title>Cart</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<h2>Your Cart</h2>
+<div id="cart-container"></div>
+
+<button onclick="checkout()">Checkout</button>
+
+<script src="js/cart.js"></script>
+<script>
+  displayCart();
+
+  function checkout() {
+    alert("Checkout coming soon!");
+  }
+</script>
 
 </body>
 </html>
