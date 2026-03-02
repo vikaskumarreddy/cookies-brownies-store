@@ -89,7 +89,33 @@
   function toggleMenu() {
     document.querySelector(".nav-links").classList.toggle("active");
   }
+  function autoScroll(containerSelector) {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
+
+  let scrollAmount = 0;
+  const scrollStep = container.clientWidth;
+
+  setInterval(() => {
+    if (window.innerWidth <= 768) {
+      scrollAmount += scrollStep;
+
+      if (scrollAmount >= container.scrollWidth) {
+        scrollAmount = 0;
+      }
+
+      container.scrollTo({
+        left: scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  }, 3000);
+}
+
+autoScroll(".category-grid");
+autoScroll(".product-grid");
 </script>
 
 </body>
 </html>
+
