@@ -174,10 +174,38 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("auth-form").style.display = "block";
     document.getElementById("logout-section").style.display = "none";
   }
+  loadOrders(user.uid);
 });
+async function loadOrders(uid) {
+  const ordersContainer = document.getElementById("orders-list");
+  ordersContainer.innerHTML = "Loading orders...";
 
+  const q = query(collection(db, "orders"), where("userId", "==", uid));
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+    ordersContainer.innerHTML = "<p>No orders yet.</p>";
+    return;
+  }
+
+  ordersContainer.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+
+    ordersContainer.innerHTML += `
+      <div class="order-card">
+        <h4>Order ID: ${doc.id}</h4>
+        <p>Status: ${data.status}</p>
+        <p>Total: ₹${data.total}</p>
+        <p>Date: ${new Date(data.createdAt.seconds * 1000).toLocaleString()}</p>
+      </div>
+    `;
+  });
+}
 </script>
 </body>
 </html>
+
 
 
